@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String   @id @default(cuid())
+  loginId        String   @unique
+  phone          String   @default("")
+  email          String   @default("")
+  name           String   @default("")
+  role           String   @default("seeker")
+  age            Int      @default(0)
+  gender         String   @default("")
+  occupation     String   @default("")
+  city           String   @default("")
+  area           String   @default("")
+  budgetMin      Int      @default(0)
+  budgetMax      Int      @default(0)
+  moveInDate     String   @default("")
+  bio            String   @default("")
+  diet           String   @default("veg")
+  smoking        String   @default("no")
+  drinking       String   @default("no")
+  pets           String   @default("no")
+  guests         String   @default("rare")
+  schedule       String   @default("standard")
+  cleanliness    Int      @default(3)
+  languages      String   @default("English,Hindi")
+  photo          String   @default("")
+  verified       Boolean  @default(false)
+  womenOnly      Boolean  @default(false)
+  noBrokers      Boolean  @default(false)
+  likesBack      Boolean  @default(false)
+  onboardingDone Boolean  @default(false)
+  isSeed         Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  listings    Listing[]
+  swipesMade  Swipe[]   @relation("Swiper")
+  messages    Message[]
+  reportsMade Report[]  @relation("Reporter")
+  reportsGot  Report[]  @relation("Reported")
+  blocksMade  Block[]   @relation("Blocker")
+  blocksGot   Block[]   @relation("Blocked")
+}
+
+model Listing {
+  id               String   @id @default(cuid())
+  seedKey          String?  @unique
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title            String
+  description      String
+  rent             Int
+  deposit          Int
+  city             String
+  locality         String
+  furnished        String
+  flatType         String
+  amenities        String
+  genderPreference String
+  photo            String
+  availableFrom    String
+  active           Boolean  @default(true)
+  createdAt        DateTime @default(now())
+}
+
+model Swipe {
+  id         String   @id @default(cuid())
+  swiperId   String
+  swiper     User     @relation("Swiper", fields: [swiperId], references: [id], onDelete: Cascade)
+  targetType String
+  targetId   String
+  direction  String
+  createdAt  DateTime @default(now())
+
+  @@unique([swiperId, targetType, targetId])
+}
+
+model Match {
+  id         String    @id @default(cuid())
+  seedKey    String?   @unique
+  userLowId  String
+  userHighId String
+  listingId  String    @default("")
+  createdAt  DateTime  @default(now())
+  messages   Message[]
+
+  @@unique([userLowId, userHighId])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  seedKey   String?  @unique
+  matchId   String
+  match     Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  senderId  String
+  sender    User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  body      String
+  createdAt DateTime @default(now())
+}
+
+model Report {
+  id         String   @id @default(cuid())
+  reporterId String
+  reporter   User     @relation("Reporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  targetId   String
+  target     User     @relation("Reported", fields: [targetId], references: [id], onDelete: Cascade)
+  kind       String
+  reason     String
+  createdAt  DateTime @default(now())
+}
+
+model Block {
+  id        String   @id @default(cuid())
+  blockerId String
+  blocker   User     @relation("Blocker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blockedId String
+  blocked   User     @relation("Blocked", fields: [blockedId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([blockerId, blockedId])
+}
+
+model OtpChallenge {
+  loginId   String   @id
+  code      String
+  expiresAt DateTime
+}
