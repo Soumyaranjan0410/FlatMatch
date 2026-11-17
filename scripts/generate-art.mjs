@@ -1,7 +1,8 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const root = path.resolve(import.meta.dirname, "..");
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 const portraits = [
   { id: "ananya", skin: "#E0B08A", shadow: "#C48A62", hair: "#2A1B14", shirt: "#1F4D3A", bgA: "#F6D3BF", bgB: "#E07A5F", hairStyle: "long", blush: "#E39A8C", lip: "#A85A58", bindi: true, smile: "soft", look: 0, seed: 2 },

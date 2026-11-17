@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "tsx scripts/dev.ts",
-    "build": "prisma generate && next build",
-    "start": "next start --hostname 0.0.0.0 --port 3847",
+    "build": "node node_modules/prisma/build/index.js generate && node node_modules/next/dist/bin/next build",
+    "start": "node node_modules/next/dist/bin/next start --hostname 0.0.0.0 --port 3847",
     "lint": "eslint",
     "test": "tsx --test src/lib/matchmaking.test.ts",
     "db:seed": "tsx prisma/seed.ts",

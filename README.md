@@ -1,5 +1,22 @@
 # FlatMatch
 
+## Quickstart
+
+Works on Windows, macOS, and Linux. You need [Node.js 20 or newer](https://nodejs.org).
+
+1. Unzip `flatmatch.zip`.
+2. Open a terminal in that folder (Command Prompt, PowerShell, or Terminal).
+3. Run:
+
+```
+npm install
+npm run dev
+```
+
+The first `npm run dev` writes a local `.env` if you do not have one, creates the SQLite database, loads the Bengaluru, Pune, and Mumbai demo profiles, and starts the app at [http://127.0.0.1:3847](http://127.0.0.1:3847).
+
+Sign in with any Indian mobile number. The code is always `123456`. Or open a demo profile from the welcome screen. Ananya is `9845001001` and already has a chat.
+
 FlatMatch is a mobile-first room and flatmate app for Indian cities. Seekers and listers swipe on people and listings. A chat opens only after a mutual like.
 
 The working name is FlatMatch. A stronger India-facing name, if you rename it later, is **RoomSaathi** — saathi means companion, and it still says what the product is.

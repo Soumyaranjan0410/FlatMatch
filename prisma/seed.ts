@@ -1,7 +1,30 @@
-import { config } from "dotenv";
+import { existsSync, readFileSync } from "node:fs";
+import path from "node:path";
 import { PrismaClient } from "@prisma/client";
 
-config();
+function loadEnvFile() {
+  const envFile = path.resolve(process.cwd(), ".env");
+  if (!existsSync(envFile)) return;
+  const text = readFileSync(envFile, "utf8");
+  for (const line of text.split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const eq = trimmed.indexOf("=");
+    if (eq <= 0) continue;
+    const key = trimmed.slice(0, eq).trim();
+    let value = trimmed.slice(eq + 1).trim();
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+    if (process.env[key] === undefined) process.env[key] = value;
+  }
+}
+
+loadEnvFile();
+if (!process.env.DATABASE_URL) process.env.DATABASE_URL = "file:./dev.db";
 
 const prisma = new PrismaClient();
 
