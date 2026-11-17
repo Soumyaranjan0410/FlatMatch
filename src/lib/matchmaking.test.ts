@@ -17,6 +17,7 @@ const base: Lifestyle = {
   pets: "no",
   guests: "rare",
   schedule: "standard",
+  workSetup: "hybrid",
   cleanliness: 4,
   languages: ["Hindi", "English"],
 };

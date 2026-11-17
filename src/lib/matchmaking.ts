@@ -4,6 +4,7 @@ const SMOKE = ["no", "occasionally", "yes"];
 const DRINK = ["no", "socially", "yes"];
 const GUESTS = ["rare", "sometimes", "often"];
 const SCHEDULE = ["standard", "hybrid", "night"];
+const WORK = ["office", "hybrid", "wfh"];
 
 function scalePoints(scale: string[], a: string, b: string, points: number) {
   const d = Math.abs(scale.indexOf(a) - scale.indexOf(b));
@@ -30,11 +31,12 @@ export function compatibility(a: Lifestyle, b: Lifestyle) {
   score += petsPoints(a.pets, b.pets);
   score += scalePoints(GUESTS, a.guests, b.guests, 10);
   score += scalePoints(SCHEDULE, a.schedule, b.schedule, 12);
+  score += scalePoints(WORK, a.workSetup || "hybrid", b.workSetup || "hybrid", 10);
   const cleanDiff = Math.abs((a.cleanliness || 3) - (b.cleanliness || 3));
   score += cleanDiff === 0 ? 14 : cleanDiff === 1 ? 9 : cleanDiff === 2 ? 4 : 0;
   const overlap = a.languages.filter((language) => b.languages.includes(language)).length;
   score += Math.min(10, overlap * 5);
-  return Math.max(1, Math.min(99, Math.round((score / 110) * 100)));
+  return Math.max(1, Math.min(99, Math.round((score / 120) * 100)));
 }
 
 const DIET_LABEL: Record<string, string> = {
@@ -55,6 +57,12 @@ export function compatibilityNotes(a: Lifestyle, b: Lifestyle) {
 
   if (a.smoking === "no" && b.smoking === "no") notes.push("Neither of you smokes");
   else if (a.smoking === "yes" || b.smoking === "yes") notes.push("Smoking habits differ");
+
+  if ((a.workSetup || "hybrid") === "wfh" && (b.workSetup || "hybrid") === "wfh") {
+    notes.push("You both work from home");
+  } else if ((a.workSetup || "hybrid") === "wfh" || (b.workSetup || "hybrid") === "wfh") {
+    notes.push("One of you works from home most days");
+  }
 
   if (a.schedule === "night" || b.schedule === "night") {
     notes.push(a.schedule === b.schedule ? "You both keep night hours" : "One of you works nights");
@@ -126,5 +134,6 @@ export function defaultFilters(user: {
     budgetMax: (user.budgetMax || 30000) + 8000,
     gender: user.womenOnly ? "woman" : "any",
     moveInStrict: true,
+    verifiedOnly: false,
   };
 }

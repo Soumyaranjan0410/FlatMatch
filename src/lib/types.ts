@@ -5,6 +5,7 @@ export type Lifestyle = {
   pets: string;
   guests: string;
   schedule: string;
+  workSetup: string;
   cleanliness: number;
   languages: string[];
 };
@@ -49,6 +50,7 @@ export type DeckCard = {
   type: "listing" | "person";
   score: number;
   notes: string[];
+  brokerReports: number;
   person: PublicPerson;
   listing: PublicListing | null;
   context: string;
@@ -85,4 +87,5 @@ export type Filters = {
   budgetMax: number;
   gender: "any" | "woman" | "man";
   moveInStrict: boolean;
+  verifiedOnly: boolean;
 };

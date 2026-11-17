@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { DEMO_ACCOUNTS, DIETS, SCHEDULES } from "@/lib/constants";
 import { api } from "@/lib/client";
 import { inr, phoneLabel, prettyDate } from "@/lib/format";
+import { useLang } from "@/lib/i18n";
 import { useSession } from "@/lib/session-client";
 import type { Me } from "@/lib/types";
 
@@ -20,6 +21,7 @@ export default function ProfilePage() {
   const me = state.status === "app" ? state.user : null;
   const [bio, setBio] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const { lang, setLang, t } = useLang();
 
   async function save(partial: Partial<Me>) {
     if (!me) return;
@@ -110,6 +112,15 @@ export default function ProfilePage() {
               I'm not charging brokerage. People can still report me if I break it.
             </span>
           </label>
+
+          <div className="mt-4 flex items-center justify-between rounded-2xl border px-3 py-3 text-sm">
+            <span className="font-medium">{t("language")}</span>
+            <span className="flex gap-2">
+              <button type="button" className={lang === "en" ? "rounded-full bg-primary px-3 py-1 text-primary-foreground" : "rounded-full border px-3 py-1"} onClick={() => setLang("en")}>English</button>
+              <button type="button" className={lang === "hi" ? "rounded-full bg-primary px-3 py-1 text-primary-foreground" : "rounded-full border px-3 py-1"} onClick={() => setLang("hi")}>हिन्दी</button>
+            </span>
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">Hindi currently covers the tab bar, deck, match screen, and these safety labels. The rest of the copy stays in English until the full translation.</p>
 
           <div className="mt-4 grid gap-2">
             <Link href="/verify" className="flex h-12 items-center justify-center rounded-full bg-[#1F6B4A] px-4 text-sm font-medium text-white">

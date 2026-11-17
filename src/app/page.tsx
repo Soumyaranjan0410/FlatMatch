@@ -39,7 +39,7 @@ export default function WelcomePage() {
     <AppFrame allow="guest">
       <main className="flex min-h-0 flex-1 flex-col justify-between px-6 pt-[max(1.5rem,env(safe-area-inset-top))] pb-8">
         <div>
-          <p className="text-xs font-semibold tracking-[0.16em] text-primary uppercase">Bengaluru · Pune · Mumbai</p>
+          <p className="text-xs font-semibold tracking-[0.16em] text-primary uppercase">Bengaluru · Pune · Hyderabad · Mumbai · Delhi NCR · Chennai</p>
           <div className="mt-6">
             <Mark />
           </div>

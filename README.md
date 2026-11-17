@@ -13,7 +13,7 @@ npm install
 npm run dev
 ```
 
-The first `npm run dev` writes a local `.env` if you do not have one, creates the SQLite database, loads the Bengaluru, Pune, and Mumbai demo profiles, and starts the app at [http://127.0.0.1:3847](http://127.0.0.1:3847).
+The first `npm run dev` writes a local `.env` if you do not have one, creates the SQLite database, loads demo profiles for Bengaluru, Pune, Hyderabad, Mumbai, Delhi NCR and Chennai, and starts the app at [http://127.0.0.1:3847](http://127.0.0.1:3847).
 
 Sign in with any Indian mobile number. The code is always `123456`. Or open a demo profile from the welcome screen. Ananya is `9845001001` and already has a chat.
 
@@ -30,7 +30,7 @@ npm install
 npm run dev
 ```
 
-`npm run dev` creates the SQLite database, loads the Bengaluru, Pune and Mumbai seed data, and starts the app at [http://127.0.0.1:3847](http://127.0.0.1:3847).
+`npm run dev` creates the SQLite database, loads the six-city seed data, and starts the app at [http://127.0.0.1:3847](http://127.0.0.1:3847).
 
 Other commands:
 
@@ -57,6 +57,19 @@ Or skip that and open a seeded profile from the welcome screen:
 Seed accounts can also sign in with `firstname@flatmatch.demo` (for example `ananya@flatmatch.demo`) and the same code.
 
 The verified badge is a **mock DigiLocker-style step**. The only accepted demo number is `1234 1234 1234`, then OTP `123456`. Do not enter a real Aadhaar number. Nothing is sent to UIDAI or DigiLocker.
+
+## After the November 2026 market check
+
+The comparison, with sources, is in [docs/COMPETITION.md](docs/COMPETITION.md). The product changes that came out of it:
+
+- Rent, deposit in months, and brokerage on every room card. A no-brokers pledge shows brokerage as ₹0.
+- Broker reports are counted on the card and those people sort to the bottom. The seed includes a Koramangala token listing with two broker reports.
+- Phone numbers stay off cards. After a match, sharing a number is a separate button.
+- A verified-only filter on the deck.
+- Share a visit plan from the chat. The copied note has the time and place, and no phone numbers.
+- Office, hybrid, or work-from-home is part of the compatibility score.
+- Hyderabad, Delhi NCR and Chennai sit beside Bengaluru, Pune and Mumbai.
+- A Hindi toggle for the tab bar, deck, match screen and safety labels.
 
 ## What the MVP does
 
@@ -106,7 +119,8 @@ src/lib/matchmaking  pure scoring and filters (unit tested)
 src/lib/deck.ts      who is allowed on the deck
 src/lib/swipe-service.ts
 prisma/schema.prisma users, listings, swipes, matches, messages, reports, blocks
-prisma/seed.ts       Bengaluru, Pune, Mumbai
+prisma/seed.ts       Bengaluru, Pune, Hyderabad, Mumbai, Delhi NCR, Chennai
+docs/COMPETITION.md  November 2026 competitor notes and sources
 public/portraits     illustrated profiles
 public/rooms         illustrated flats
 ```

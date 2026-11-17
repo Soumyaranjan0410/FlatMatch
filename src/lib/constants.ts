@@ -1,9 +1,12 @@
-export const CITIES = ["Bengaluru", "Pune", "Mumbai"] as const;
+export const CITIES = ["Bengaluru", "Pune", "Hyderabad", "Mumbai", "Delhi NCR", "Chennai"] as const;
 
 export const AREAS: Record<(typeof CITIES)[number], string[]> = {
   Bengaluru: ["Koramangala", "Indiranagar", "HSR Layout", "Whitefield", "Jayanagar", "BTM Layout", "JP Nagar", "Malleshwaram"],
   Pune: ["Kothrud", "Baner", "Viman Nagar", "Hinjewadi", "Koregaon Park", "Kalyani Nagar"],
+  Hyderabad: ["Gachibowli", "Madhapur", "Kondapur", "Hitech City"],
   Mumbai: ["Andheri West", "Bandra West", "Powai", "Goregaon East", "Dadar East", "Lower Parel"],
+  "Delhi NCR": ["Gurugram", "Noida", "Dwarka", "Hauz Khas"],
+  Chennai: ["Adyar", "OMR", "Velachery", "T Nagar"],
 };
 
 export const ROLES = [
@@ -52,6 +55,12 @@ export const SCHEDULES = [
   { id: "standard", label: "Daytime" },
   { id: "hybrid", label: "Hybrid" },
   { id: "night", label: "Night shift" },
+] as const;
+
+export const WORK_SETUPS = [
+  { id: "office", label: "Office" },
+  { id: "hybrid", label: "Hybrid" },
+  { id: "wfh", label: "Work from home" },
 ] as const;
 
 export const LANGUAGES = [

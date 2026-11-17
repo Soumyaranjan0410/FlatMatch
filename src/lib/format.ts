@@ -39,6 +39,12 @@ export function furnishedLabel(id: string) {
   return id;
 }
 
+export function depositMonths(rent: number, deposit: number) {
+  if (!rent) return 0;
+  const months = deposit / rent;
+  return Math.round(months * 10) / 10;
+}
+
 export function phoneLabel(phone: string) {
   if (!phone || phone.length !== 10) return phone;
   return `+91 ${phone.slice(0, 5)} ${phone.slice(5)}`;

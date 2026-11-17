@@ -25,6 +25,7 @@ import {
   ROOM_PRESETS,
   SCHEDULES,
   SMOKING,
+  WORK_SETUPS,
 } from "@/lib/constants";
 import { api } from "@/lib/client";
 import { useSession } from "@/lib/session-client";
@@ -53,6 +54,7 @@ export default function OnboardingPage() {
     pets: "ok",
     guests: "sometimes",
     schedule: "hybrid",
+    workSetup: "hybrid",
     cleanliness: 4,
     languages: ["Hindi", "English"] as string[],
     photo: PRESET_PORTRAITS[0] as string,
@@ -233,6 +235,7 @@ export default function OnboardingPage() {
               <Group label="Pets" value={form.pets} options={PETS} onChange={(pets) => patch({ pets })} />
               <Group label="Guests" value={form.guests} options={GUESTS} onChange={(guests) => patch({ guests })} />
               <Group label="Hours" value={form.schedule} options={SCHEDULES} onChange={(schedule) => patch({ schedule })} />
+              <Group label="Work setup" value={form.workSetup} options={WORK_SETUPS} onChange={(workSetup) => patch({ workSetup })} />
               <label className="text-sm">
                 Cleanliness · {form.cleanliness}/5
                 <input

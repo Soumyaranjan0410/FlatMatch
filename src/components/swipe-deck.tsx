@@ -10,7 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { CITIES, DIETS, DRINKING, GUESTS, PETS, SCHEDULES, SMOKING } from "@/lib/constants";
 import { api } from "@/lib/client";
-import { flatLabel, furnishedLabel, inr, prettyDate } from "@/lib/format";
+import { depositMonths, flatLabel, furnishedLabel, inr, prettyDate } from "@/lib/format";
+import { useLang } from "@/lib/i18n";
 import { defaultFilters } from "@/lib/matchmaking";
 import type { DeckCard, Filters, Me, PublicListing } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -28,6 +29,7 @@ function scoreTone(score: number) {
 }
 
 function CardFace({ card }: { card: DeckCard }) {
+  const { t } = useLang();
   const photo = card.type === "listing" && card.listing ? card.listing.photo : card.person.photo;
   const title = card.type === "listing" && card.listing ? card.listing.title : card.person.name;
   return (
@@ -49,14 +51,24 @@ function CardFace({ card }: { card: DeckCard }) {
           {card.person.womenOnly ? (
             <span className="rounded-full bg-white/15 px-2 py-0.5 text-[11px] font-semibold">Women only</span>
           ) : null}
+          {card.brokerReports > 0 ? (
+            <span className="rounded-full bg-[#9F2D2D] px-2 py-0.5 text-[11px] font-semibold">
+              {t("brokerFlags")}: {card.brokerReports}
+            </span>
+          ) : null}
         </div>
         <h2 className="font-display text-[1.85rem] leading-none tracking-tight text-balance">{title}</h2>
         <p className="mt-2 text-sm text-white/85">
           {card.type === "listing" && card.listing
-            ? `${inr(card.listing.rent)} / month · ${roomLine(card.listing)}`
+            ? `${inr(card.listing.rent)} rent · ${inr(card.listing.deposit)} deposit (${depositMonths(card.listing.rent, card.listing.deposit)} mo) · ${t("brokerage")} ${card.person.noBrokers ? t("zero") : t("notPledged")}`
             : `${card.person.age} · ${card.person.occupation}`}
         </p>
-        <p className="mt-1 text-sm text-white/75">
+        {card.type === "listing" && card.listing ? (
+          <p className="mt-1 text-xs text-white/70">{roomLine(card.listing)} · {t("hidden")}</p>
+        ) : (
+          <p className="mt-1 text-xs text-white/70">{t("hidden")}</p>
+        )}
+        <p className="text-sm text-white/75">
           {card.person.area}, {card.person.city}
           {card.type === "person" ? ` · ${inr(card.person.budgetMin)}–${inr(card.person.budgetMax)}` : ""}
         </p>
@@ -192,6 +204,7 @@ export function SwipeDeck({ me }: { me: Me }) {
   const [command, setCommand] = useState<{ dir: "like" | "pass"; n: number } | null>(null);
   const [match, setMatch] = useState<MatchHit | null>(null);
   const [hint, setHint] = useState(true);
+  const { t } = useLang();
   const busy = useRef(false);
 
   async function load(nextFilters = filters, nextMode = mode) {
@@ -204,6 +217,7 @@ export function SwipeDeck({ me }: { me: Me }) {
       budgetMax: String(nextFilters.budgetMax),
       gender: nextFilters.gender,
       moveInStrict: nextFilters.moveInStrict ? "1" : "0",
+      verifiedOnly: nextFilters.verifiedOnly ? "1" : "0",
     });
     try {
       const data = await api<{ cards: DeckCard[] }>(`/api/deck?${params.toString()}`);
@@ -218,7 +232,7 @@ export function SwipeDeck({ me }: { me: Me }) {
   useEffect(() => {
     void load(filters, mode);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode, filters.city, filters.budgetMin, filters.budgetMax, filters.gender, filters.moveInStrict]);
+  }, [mode, filters.city, filters.budgetMin, filters.budgetMax, filters.gender, filters.moveInStrict, filters.verifiedOnly]);
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
@@ -271,7 +285,7 @@ export function SwipeDeck({ me }: { me: Me }) {
     <div className="flex min-h-0 flex-1 flex-col">
       <header className="flex items-center justify-between px-4 pt-[max(0.8rem,env(safe-area-inset-top))] pb-2">
         <div>
-          <p className="font-display text-2xl leading-none tracking-tight">Discover</p>
+          <p className="font-display text-2xl leading-none tracking-tight">{t("discover")}</p>
           <p className="mt-1 text-xs text-muted-foreground">
             {filters.city === "all" ? "All cities" : filters.city} · {inr(filters.budgetMin)}–{inr(filters.budgetMax)}
           </p>
@@ -289,7 +303,7 @@ export function SwipeDeck({ me }: { me: Me }) {
             onClick={() => setMode(item)}
             className={cn("rounded-full py-2", mode === item ? "bg-card shadow-sm" : "text-muted-foreground")}
           >
-            {item === "rooms" ? "Rooms" : "People"}
+            {item === "rooms" ? t("rooms") : t("people")}
           </button>
         ))}
       </div>
@@ -385,7 +399,7 @@ export function SwipeDeck({ me }: { me: Me }) {
       <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
         <SheetContent side="bottom" className="max-h-[88dvh] overflow-y-auto rounded-t-3xl">
           <SheetHeader>
-            <SheetTitle className="font-display text-2xl">Filters</SheetTitle>
+            <SheetTitle className="font-display text-2xl">{t("filters")}</SheetTitle>
           </SheetHeader>
           <div className="space-y-4 px-4 pb-6">
             <fieldset>
@@ -448,6 +462,14 @@ export function SwipeDeck({ me }: { me: Me }) {
               {me.womenOnly ? <p className="mt-2 text-xs text-muted-foreground">Women-only mode keeps this on Women.</p> : null}
             </fieldset>
             <label className="flex items-center justify-between gap-3 text-sm">
+              <span>{t("verifiedOnly")}</span>
+              <input
+                type="checkbox"
+                checked={draft.verifiedOnly}
+                onChange={(event) => setDraft((current) => ({ ...current, verifiedOnly: event.target.checked }))}
+              />
+            </label>
+            <label className="flex items-center justify-between gap-3 text-sm">
               <span>Only places around my move-in ({prettyDate(me.moveInDate)})</span>
               <input
                 type="checkbox"
@@ -485,7 +507,7 @@ export function SwipeDeck({ me }: { me: Me }) {
       {match ? (
         <div className="fixed inset-0 z-50 grid place-items-center bg-[#1c1915]/80 p-6">
           <div className="w-full max-w-sm rounded-[28px] bg-[#fbf7f2] p-6 text-center shadow-2xl">
-            <p className="text-xs font-semibold tracking-[0.18em] text-primary uppercase">It's a match</p>
+            <p className="text-xs font-semibold tracking-[0.18em] text-primary uppercase">{t("match")}</p>
             <h2 className="mt-2 font-display text-4xl tracking-tight">You and {match.other.name.split(" ")[0]}</h2>
             <div className="my-5 flex justify-center">
               <img src={me.photo} alt="" className="size-24 rounded-full border-4 border-white object-cover shadow" />
@@ -498,10 +520,10 @@ export function SwipeDeck({ me }: { me: Me }) {
             </p>
             <div className="mt-5 grid gap-2">
               <a href={`/matches/${match.id}`} className="inline-flex h-12 items-center justify-center rounded-full bg-primary px-5 font-medium text-primary-foreground">
-                Send a message
+                {t("send")}
               </a>
               <button type="button" className="h-12 rounded-full text-sm font-medium" onClick={() => setMatch(null)}>
-                Keep swiping
+                {t("keep")}
               </button>
             </div>
           </div>
@@ -562,6 +584,9 @@ function CardDetail({ card, onReport }: { card: DeckCard; onReport: () => void }
             {flatLabel(listing.flatType)} · {furnishedLabel(listing.furnished)} · {listing.locality} · free {prettyDate(listing.availableFrom)}
           </p>
           <p className="mt-2 leading-relaxed">{listing.description}</p>
+          <p className="mt-2">
+            {inr(listing.rent)} rent · {inr(listing.deposit)} deposit ({depositMonths(listing.rent, listing.deposit)} months) · Brokerage {person.noBrokers ? "₹0" : "not pledged"}
+          </p>
           <p className="mt-2 text-xs text-muted-foreground">{listing.amenities.join(" · ")} · Prefers {listing.genderPreference}</p>
         </section>
       ) : null}

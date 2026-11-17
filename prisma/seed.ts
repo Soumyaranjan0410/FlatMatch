@@ -54,6 +54,8 @@ type Person = {
   womenOnly?: boolean;
   noBrokers?: boolean;
   likesBack?: boolean;
+  workSetup?: string;
+  photo?: string;
 };
 
 const people: Person[] = [
@@ -225,6 +227,62 @@ const people: Person[] = [
     diet: "veg", smoking: "no", drinking: "no", pets: "no", guests: "rare", schedule: "standard", cleanliness: 5,
     languages: "Kannada,Hindi,English", verified: true, womenOnly: true, noBrokers: true, likesBack: true,
   },
+  {
+    key: "lakshmi", phone: "9845001022", name: "Lakshmi Reddy", age: 26, gender: "woman", role: "seeker",
+    occupation: "Backend engineer", city: "Hyderabad", area: "Gachibowli",
+    budgetMin: 14000, budgetMax: 22000, moveInDate: "2026-12-08",
+    bio: "I work from home three days a week and want a quiet room near Gachibowli, not a broker's token listing.",
+    diet: "veg", smoking: "no", drinking: "no", pets: "no", guests: "rare", schedule: "hybrid", cleanliness: 4,
+    languages: "Telugu,Hindi,English", verified: true, noBrokers: true, likesBack: true, workSetup: "wfh", photo: "/portraits/preset3.svg",
+  },
+  {
+    key: "arun", phone: "9845001023", name: "Arun Rao", age: 28, gender: "man", role: "lister",
+    occupation: "Product analyst", city: "Hyderabad", area: "Madhapur",
+    budgetMin: 16000, budgetMax: 26000, moveInDate: "2026-12-01",
+    bio: "Room in a furnished 2BHK near Madhapur. Deposit is two months, paid to me. I am in the office most days.",
+    diet: "eggetarian", smoking: "no", drinking: "socially", pets: "ok", guests: "sometimes", schedule: "standard", cleanliness: 4,
+    languages: "Telugu,English,Hindi", verified: true, noBrokers: true, likesBack: true, workSetup: "office", photo: "/portraits/preset2.svg",
+  },
+  {
+    key: "neha", phone: "9845001024", name: "Neha Kapoor", age: 25, gender: "woman", role: "seeker",
+    occupation: "Consultant", city: "Delhi NCR", area: "Gurugram",
+    budgetMin: 18000, budgetMax: 30000, moveInDate: "2026-12-12",
+    bio: "Moving to Cyber Hub side for a project. Women-only is off, but I will not share my number before we match.",
+    diet: "veg", smoking: "no", drinking: "socially", pets: "no", guests: "sometimes", schedule: "standard", cleanliness: 4,
+    languages: "Hindi,English,Punjabi", verified: true, noBrokers: true, workSetup: "hybrid", photo: "/portraits/preset7.svg",
+  },
+  {
+    key: "vivek", phone: "9845001025", name: "Vivek Sharma", age: 27, gender: "man", role: "lister",
+    occupation: "SDE", city: "Delhi NCR", area: "Noida",
+    budgetMin: 12000, budgetMax: 20000, moveInDate: "2026-11-28",
+    bio: "Sector 62, one room free in a 2BHK. Direct from the flat. Please do not ask me for a visit token.",
+    diet: "nonveg", smoking: "no", drinking: "socially", pets: "no", guests: "sometimes", schedule: "hybrid", cleanliness: 3,
+    languages: "Hindi,English", noBrokers: true, likesBack: true, workSetup: "hybrid", photo: "/portraits/preset6.svg",
+  },
+  {
+    key: "divya", phone: "9845001026", name: "Divya Krishnan", age: 24, gender: "woman", role: "seeker",
+    occupation: "UX researcher", city: "Chennai", area: "Adyar",
+    budgetMin: 12000, budgetMax: 20000, moveInDate: "2026-12-15",
+    bio: "Looking near Adyar or OMR. Vegetarian kitchen, and I work from home on research days.",
+    diet: "veg", smoking: "no", drinking: "no", pets: "no", guests: "rare", schedule: "hybrid", cleanliness: 5,
+    languages: "Tamil,English", verified: true, noBrokers: true, likesBack: true, workSetup: "wfh", photo: "/portraits/preset8.svg",
+  },
+  {
+    key: "karthik", phone: "9845001027", name: "Karthik Subramanian", age: 29, gender: "man", role: "lister",
+    occupation: "Data engineer", city: "Chennai", area: "OMR",
+    budgetMin: 14000, budgetMax: 24000, moveInDate: "2026-12-01",
+    bio: "Room in a 2BHK on OMR, two months deposit, no brokerage. I am in the office near Sholinganallur.",
+    diet: "eggetarian", smoking: "no", drinking: "socially", pets: "no", guests: "rare", schedule: "standard", cleanliness: 4,
+    languages: "Tamil,English", verified: true, noBrokers: true, likesBack: true, workSetup: "office", photo: "/portraits/preset4.svg",
+  },
+  {
+    key: "ramesh", phone: "9845001030", name: "Ramesh Gowda", age: 34, gender: "man", role: "lister",
+    occupation: "Property consultant", city: "Bengaluru", area: "Koramangala",
+    budgetMin: 8000, budgetMax: 15000, moveInDate: "2026-11-20",
+    bio: "Many options available. Pay a small token to block the flat before the visit. I can show you five houses tomorrow.",
+    diet: "nonveg", smoking: "yes", drinking: "yes", pets: "no", guests: "often", schedule: "standard", cleanliness: 2,
+    languages: "Kannada,Hindi", noBrokers: false, workSetup: "office", photo: "/portraits/preset6.svg",
+  },
 ];
 
 const listings = [
@@ -298,6 +356,34 @@ const listings = [
     amenities: "Wi-Fi,Geyser,Fridge,Security,House help", genderPreference: "women",
     photo: "/rooms/koramangala-pg.svg", availableFrom: "2026-11-25",
   },
+  {
+    seedKey: "madhapur", owner: "arun", title: "Room in a 2BHK, Madhapur",
+    description: "Furnished room near the Inorbit side. Deposit is two months. I live here and I am not taking a brokerage.",
+    rent: 18000, deposit: 36000, city: "Hyderabad", locality: "Madhapur", furnished: "furnished", flatType: "2BHK",
+    amenities: "Wi-Fi,AC,Washing machine,Geyser,Lift,Power backup", genderPreference: "any",
+    photo: "/rooms/hsr.svg", availableFrom: "2026-12-01",
+  },
+  {
+    seedKey: "noida", owner: "vivek", title: "Room in a 2BHK, Noida Sector 62",
+    description: "Semi-furnished, ten minutes from the blue line. Deposit is one month. No token, no broker.",
+    rent: 14000, deposit: 14000, city: "Delhi NCR", locality: "Noida", furnished: "semi", flatType: "2BHK",
+    amenities: "Wi-Fi,Geyser,Fridge,Lift,Power backup", genderPreference: "any",
+    photo: "/rooms/jayanagar.svg", availableFrom: "2026-11-28",
+  },
+  {
+    seedKey: "omr", owner: "karthik", title: "Room on OMR, near Sholinganallur",
+    description: "Furnished room in a 2BHK. Two months deposit paid to me. Visit first, pay nothing before you see it.",
+    rent: 16000, deposit: 32000, city: "Chennai", locality: "OMR", furnished: "furnished", flatType: "2BHK",
+    amenities: "Wi-Fi,AC,Washing machine,Geyser,Power backup", genderPreference: "any",
+    photo: "/rooms/baner.svg", availableFrom: "2026-12-01",
+  },
+  {
+    seedKey: "token-flat", owner: "ramesh", title: "Urgent 2BHK, Koramangala, token to block",
+    description: "Very low rent. Transfer a token on UPI to hold the visit slot. Multiple flats available today.",
+    rent: 9000, deposit: 50000, city: "Bengaluru", locality: "Koramangala", furnished: "semi", flatType: "2BHK",
+    amenities: "Wi-Fi", genderPreference: "any",
+    photo: "/rooms/kp.svg", availableFrom: "2026-11-18",
+  },
 ];
 
 const threads = [
@@ -357,9 +443,10 @@ async function main() {
       pets: person.pets,
       guests: person.guests,
       schedule: person.schedule,
+      workSetup: person.workSetup || "hybrid",
       cleanliness: person.cleanliness,
       languages: person.languages,
-      photo: `/portraits/${person.key}.svg`,
+      photo: person.photo || `/portraits/${person.key}.svg`,
       verified: Boolean(person.verified),
       womenOnly: Boolean(person.womenOnly),
       noBrokers: person.noBrokers !== false,
@@ -373,6 +460,21 @@ async function main() {
       create: data,
     });
     ids.set(person.key, user.id);
+  }
+
+  const rameshId = ids.get("ramesh");
+  const ananyaId = ids.get("ananya");
+  const rohanId = ids.get("rohan");
+  if (rameshId && ananyaId && rohanId) {
+    const existing = await prisma.report.count({ where: { targetId: rameshId, kind: "broker" } });
+    if (existing === 0) {
+      await prisma.report.createMany({
+        data: [
+          { reporterId: ananyaId, targetId: rameshId, kind: "broker", reason: "Asked for a UPI token before any visit." },
+          { reporterId: rohanId, targetId: rameshId, kind: "broker", reason: "Same Koramangala flat offered by three numbers." },
+        ],
+      });
+    }
   }
 
   const listingIds = new Map<string, string>();

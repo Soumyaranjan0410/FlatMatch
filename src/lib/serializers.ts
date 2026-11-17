@@ -16,6 +16,7 @@ export function lifestyleOf(user: User): Lifestyle {
     pets: user.pets,
     guests: user.guests,
     schedule: user.schedule,
+    workSetup: user.workSetup || "hybrid",
     cleanliness: user.cleanliness,
     languages: splitList(user.languages),
   };

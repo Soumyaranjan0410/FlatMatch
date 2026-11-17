@@ -1,12 +1,15 @@
+import { CITIES as CITY_LIST } from "./constants";
+
 const DIETS = new Set(["veg", "eggetarian", "nonveg"]);
 const SMOKING = new Set(["no", "occasionally", "yes"]);
 const DRINKING = new Set(["no", "socially", "yes"]);
 const PETS = new Set(["no", "ok", "have"]);
 const GUESTS = new Set(["rare", "sometimes", "often"]);
 const SCHEDULES = new Set(["standard", "hybrid", "night"]);
+const WORK_SETUPS = new Set(["office", "hybrid", "wfh"]);
 const ROLES = new Set(["seeker", "lister", "both"]);
 const GENDERS = new Set(["woman", "man", "nonbinary"]);
-const CITIES = new Set(["Bengaluru", "Pune", "Mumbai"]);
+const CITIES = new Set<string>(CITY_LIST);
 const FLATS = new Set(["1BHK", "2BHK", "3BHK", "PG", "coliving"]);
 const FURNISHED = new Set(["furnished", "semi", "unfurnished"]);
 const GPREF = new Set(["any", "women", "men"]);
@@ -50,6 +53,7 @@ export function parseProfile(body: unknown): Ok<{
   pets: string;
   guests: string;
   schedule: string;
+  workSetup: string;
   cleanliness: number;
   languages: string;
   photo: string;
@@ -76,6 +80,7 @@ export function parseProfile(body: unknown): Ok<{
   const pets = str(data.pets, 20);
   const guests = str(data.guests, 20);
   const schedule = str(data.schedule, 20);
+  const workSetup = str(data.workSetup, 20) || "hybrid";
   const cleanliness = Number(data.cleanliness);
   const photo = str(data.photo, 200);
   const languages = Array.isArray(data.languages)
@@ -86,14 +91,14 @@ export function parseProfile(body: unknown): Ok<{
   if (!Number.isInteger(age) || age < 18 || age > 70) return { ok: false, error: "Age should be between 18 and 70." };
   if (!GENDERS.has(gender)) return { ok: false, error: "Choose a gender." };
   if (!ROLES.has(role)) return { ok: false, error: "Choose how you want to use FlatMatch." };
-  if (!CITIES.has(city)) return { ok: false, error: "Choose Bengaluru, Pune or Mumbai." };
+  if (!CITIES.has(city)) return { ok: false, error: "Choose Bengaluru, Pune, Hyderabad, Mumbai, Delhi NCR or Chennai." };
   if (area.length < 2) return { ok: false, error: "Add your area or neighbourhood." };
   if (occupation.length < 2) return { ok: false, error: "Add your work or college." };
   if (!Number.isFinite(budgetMin) || !Number.isFinite(budgetMax) || budgetMin < 3000 || budgetMax > 200000 || budgetMin > budgetMax) {
     return { ok: false, error: "Set a budget range in rupees." };
   }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(moveInDate)) return { ok: false, error: "Pick a move-in date." };
-  if (!DIETS.has(diet) || !SMOKING.has(smoking) || !DRINKING.has(drinking) || !PETS.has(pets) || !GUESTS.has(guests) || !SCHEDULES.has(schedule)) {
+  if (!DIETS.has(diet) || !SMOKING.has(smoking) || !DRINKING.has(drinking) || !PETS.has(pets) || !GUESTS.has(guests) || !SCHEDULES.has(schedule) || !WORK_SETUPS.has(workSetup)) {
     return { ok: false, error: "Finish the lifestyle questions." };
   }
   if (!Number.isInteger(cleanliness) || cleanliness < 1 || cleanliness > 5) return { ok: false, error: "Set cleanliness from 1 to 5." };
@@ -124,6 +129,7 @@ export function parseProfile(body: unknown): Ok<{
       pets,
       guests,
       schedule,
+      workSetup,
       cleanliness,
       languages: languages.join(","),
       photo,

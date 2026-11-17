@@ -29,6 +29,7 @@ model User {
   pets           String   @default("no")
   guests         String   @default("rare")
   schedule       String   @default("standard")
+  workSetup      String   @default("hybrid")
   cleanliness    Int      @default(3)
   languages      String   @default("English,Hindi")
   photo          String   @default("")
@@ -89,6 +90,9 @@ model Match {
   userLowId  String
   userHighId String
   listingId  String    @default("")
+  visitWhen  String    @default("")
+  visitPlace String    @default("")
+  visitNote  String    @default("")
   createdAt  DateTime  @default(now())
   messages   Message[]
 

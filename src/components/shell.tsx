@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Heart, House, ShieldCheck, Sparkles, UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLang } from "@/lib/i18n";
 import { clearSessionMemory, useSession } from "@/lib/session-client";
 import type { Me } from "@/lib/types";
 
@@ -63,14 +64,15 @@ export function Splash() {
 }
 
 const TABS = [
-  { href: "/discover", label: "Discover", icon: Sparkles },
-  { href: "/matches", label: "Matches", icon: Heart },
-  { href: "/list", label: "Room", icon: House },
-  { href: "/profile", label: "You", icon: UserRound },
-];
+  { href: "/discover", label: "discover", icon: Sparkles },
+  { href: "/matches", label: "matches", icon: Heart },
+  { href: "/list", label: "room", icon: House },
+  { href: "/profile", label: "you", icon: UserRound },
+] as const;
 
 function TabBar({ user }: { user: Me }) {
   const pathname = usePathname();
+  const { t } = useLang();
   return (
     <nav className="grid grid-cols-4 border-t border-border bg-card/95 px-2 pt-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] backdrop-blur">
       {TABS.map((tab) => {
@@ -86,7 +88,7 @@ function TabBar({ user }: { user: Me }) {
             )}
           >
             <Icon className="size-5" strokeWidth={active ? 2.4 : 1.8} />
-            {tab.label}
+            {t(tab.label)}
             {tab.href === "/matches" && user.matchCount > 0 ? (
               <span className="absolute top-0 right-[calc(50%-22px)] grid min-w-4 place-items-center rounded-full bg-primary px-1 text-[10px] leading-4 text-primary-foreground">
                 {user.matchCount}
